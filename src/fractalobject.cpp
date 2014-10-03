@@ -194,10 +194,6 @@ void Fractal::setRedBlueRender(bool red)
 // draws the base shape be it cube, pyramid or whatever
 void Fractal::RenderBase(const CRGBA& color)
 {
-  glApply();
-  glMaterial
-  D3DMATERIAL8 mat;
-  memset(&mat,0,sizeof(D3DMATERIAL8));
   const GLfloat dif[] = {color.r, color.g, color.b, color.a};
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dif);
   if(myData.base == FRACTAL_BASE_SPHERE)
