@@ -1,6 +1,6 @@
 #include "Util.h"
 
-ColorRGB HSVtoRGB( float h, float s, float v )
+CRGBA HSVtoRGB( float h, float s, float v )
 {
   int i;
   float f;
@@ -8,7 +8,7 @@ ColorRGB HSVtoRGB( float h, float s, float v )
 
   if( s == 0 ) { // achromatic (grey)
     r = g = b = (int)(255*v);
-    return D3DCOLOR_RGBA(r,g,b,255);
+    return CRGBA(r,g,b,255);
   }
 
   h /= 60;      // sector 0 to 5
@@ -20,14 +20,14 @@ ColorRGB HSVtoRGB( float h, float s, float v )
   t = (int)(m * ( 1 - s * ( 1 - f ) ));
 
   switch( i ) {
-    case 0: return D3DCOLOR_RGBA(m,t,p,255);
-    case 1: return D3DCOLOR_RGBA(q,m,p,255);
-    case 2: return D3DCOLOR_RGBA(p,m,t,255);
-    case 3: return D3DCOLOR_RGBA(p,q,m,255);
-    case 4: return D3DCOLOR_RGBA(t,p,m,255);
+    case 0: return CRGBA(m,t,p,255);
+    case 1: return CRGBA(q,m,p,255);
+    case 2: return CRGBA(p,m,t,255);
+    case 3: return CRGBA(p,q,m,255);
+    case 4: return CRGBA(t,p,m,255);
     default: break;    // case 5:
   }
-  return D3DCOLOR_RGBA(m,p,q,255);
+  return CRGBA(m,p,q,255);
 }
 
 int g_colorType = 1;
@@ -43,7 +43,7 @@ void incrementColor()
     g_colorType = 2;
 }
 
-ColorRGB randColor()
+CRGBA randColor()
 {
   float h = (float)(rand()%360),s,v;
   switch(g_colorType)
@@ -64,34 +64,13 @@ ColorRGB randColor()
   return HSVtoRGB(h,s,v);
 }
 
-DWORD LerpColor3(DWORD s,DWORD e,float r)
-{
-  Color res = { 255,0,0,0};
-  Color sa = * ((Color *) &s);
-  Color ea = * ((Color *) &e);
-  res.r = sa.r + (ea.r - sa.r)*r;
-  res.g = sa.g + (ea.g - sa.g)*r;
-  res.b = sa.b + (ea.b - sa.b)*r;
-  return (DWORD)*(DWORD*)&res;
-};
-
-void TransformCoord(D3DXVECTOR3 * pOut, D3DXVECTOR3 * pIn, D3DXMATRIX * pMat)
-{
-  D3DXMATRIX tran;
-  D3DXMatrixTranslation(&tran,pIn->x,pIn->y,pIn->z);
-  D3DXMatrixMultiply(&tran,&tran,pMat);
-  pOut->x=tran._41;
-  pOut->y=tran._42;
-  pOut->z=tran._43;
-}
-
 MorphColor::MorphColor(int speed)
 {
   colorSpeed = speed;
   reset(randColor());
 }
 
-void MorphColor::reset(ColorRGB color)
+void MorphColor::reset(const CRGBA& color)
 {
   currentColor = startColor = color;
   endColor = randColor();
