@@ -220,7 +220,7 @@ extern "C" void Render()
   RenderGradientBackground();
   static int sx = (rand()%2)*2-1, sy = (rand()%2)*2-1;
 
-  glRotatef(sx*settings.frame*0.0051,sy*settings.frame*0.0032,0);
+  glRotate3f(sx*settings.frame*0.0051,sy*settings.frame*0.0032,0);
   Step();
   settings.fractal->Render();
 }
