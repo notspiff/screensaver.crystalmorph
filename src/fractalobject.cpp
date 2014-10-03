@@ -124,7 +124,7 @@ void Fractal::Render()
 }
 
 //The Recursively called render function
-void Fractal::RenderChild(int depth, int parentTransform, ColorRGB childColor)
+void Fractal::RenderChild(int depth, int parentTransform, const CRGBA& childColor)
 {
   depth++;
 
