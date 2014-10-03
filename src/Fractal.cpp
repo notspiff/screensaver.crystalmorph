@@ -119,16 +119,16 @@ void SetupGradientBackground(const CRGBA& dwTopColor, const CRGBA& dwBottomColor
   float x2 = (float)g_iWidth - 0.5f;
   float y2 = (float)g_iHeight - 0.5f;
 
-  g_BGVertices[0].position = CVector( x2, y1, 0.0f, 1.0f );
+  g_BGVertices[0].position = CVector( x2, y1, 0.0f);
   g_BGVertices[0].color = dwTopColor;
 
-  g_BGVertices[1].position = CVector( x2, y2, 0.0f, 1.0f );
+  g_BGVertices[1].position = CVector( x2, y2, 0.0f);
   g_BGVertices[1].color = dwBottomColor;
 
-  g_BGVertices[2].position = CVector( x1, y1, 0.0f, 1.0f );
+  g_BGVertices[2].position = CVector( x1, y1, 0.0f);
   g_BGVertices[2].color = dwTopColor;
 
-  g_BGVertices[3].position = CVector( x1, y2, 0.0f, 1.0f );
+  g_BGVertices[3].position = CVector( x1, y2, 0.0f);
   g_BGVertices[3].color = dwBottomColor;
 }
 
