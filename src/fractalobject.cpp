@@ -137,7 +137,7 @@ void Fractal::RenderChild(int depth, int parentTransform, const CRGBA& childColo
   for(int i = 0; i < myData.numTransforms; i++)
   {
     ApplyTransform(i);
-    RenderChild(depth, parentTransform, LerpColor(myData.transforms[i].color.getColor(), childColor, myColorLerpAmount));
+    RenderChild(depth, parentTransform, CRGBA::Lerp(myData.transforms[i].color.getColor(), childColor, myColorLerpAmount));
     InvertTransform(i);
   }
 }
