@@ -82,7 +82,7 @@ void CreateLight()
   glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
   const GLfloat pos[] = {5.0, -5.0, 10.0, 1.0};
   glLightfv(GL_LIGHT0, GL_POSITION, pos);
-  const GLfloat dir[] = {g_lightDir.x, g_lightDir.y, g_lightDir.z, g_lightDir.w};
+  const GLfloat dir[] = {g_lightDir.x, g_lightDir.y, g_lightDir.z, 1.0};
   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
   float at = 0.5;
   glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, &at);
