@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="screensaver.crystalmorph"
+  version="1.0.0"
+  name="CrystalMorph"
+  provider-name="spiff">
+  <requires>
+    <c-pluff version="0.1"/>
+  </requires>
+  <extension
+    point="xbmc.ui.screensaver"
+    library_linux="screensaver.crystalmorph.so"
+    library_osx="screensaver.crystalmorph.dylib"/>
+  <extension point="xbmc.addon.metadata">
+    <summary>CrystalMorph screensaver</summary>
+    <description>CrystalMorph screensaver</description>
+    <platform>linux osx</platform>
+  </extension>
+</addon>
