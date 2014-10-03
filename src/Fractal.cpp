@@ -22,17 +22,10 @@
 
 #include "Fractal.h"
 #include "fractalcontroller.h"
-#include "fractal.h"
-#include "XmlDocument.h"
-// use the 'dummy' dx8 lib - this allow you to make
-// DX8 calls which XBMC will emulate for you.
-#pragma comment (lib, "lib/xbox_dx8.lib" )
+#include "Fractal.h"
 
 FractalSettings settings;
-SCR_INFO vInfo;
-LPDIRECT3DDEVICE8 g_pd3dDevice;
 
-static  char g_szScrName[1024];
 int	g_iWidth;
 int g_iHeight;
 float g_fRatio;
@@ -40,7 +33,7 @@ float g_fRatio;
 void Step()
 {
   if (settings.frame > settings.nextTransition)
-	{
+  {
     settings.nextTransition = settings.frame + settings.transitionTime;
 
     if (settings.animationCountdown == 0)
@@ -52,7 +45,7 @@ void Step()
     else
     {
       settings.fractalcontroller->SetAnimation(false);
-      
+
       if (settings.animationCountdown-- == 1)
       {
         settings.fractalcontroller->SetToRandomFractal(3+rand()%3);
@@ -70,36 +63,34 @@ void Step()
       }
       settings.fractalcontroller->StartMorph();
     }
-	}
-	settings.fractalcontroller->UpdateFractalData();
-	settings.frame++;
+  }
+  settings.fractalcontroller->UpdateFractalData();
+  settings.frame++;
 }
 
-D3DXVECTOR3 g_lightDir = D3DXVECTOR3(-0.5f, -0.5f, 0.5f);
+CVector g_lightDir = CVector(-0.5f, -0.5f, 0.5f);
 
 void CreateLight()
 {
-  // Fill in a light structure defining our light
-  D3DLIGHT8 light;
-  memset( &light, 0, sizeof(D3DLIGHT8) );
-  light.Type    = D3DLIGHT_POINT;
-  light.Ambient = (D3DXCOLOR)D3DCOLOR_RGBA(128,0,0,255);
-  light.Diffuse = (D3DXCOLOR)D3DCOLOR_RGBA(255,255,255,255);
-  light.Specular = (D3DXCOLOR)D3DCOLOR_RGBA(255,255,255,255);
-  light.Range   = 30.0f;
-  light.Position = D3DXVECTOR3(5,5,-10);
-  light.Attenuation0 = 0.5f;
-  light.Attenuation1 = 0.02f;
-  light.Attenuation2 = 0.0f;
+  const GLfloat amb[] = {0.5, 0.0, 0.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+  const GLfloat dif[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, dif);
+  const GLfloat spec[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_SPECULAR, spec);
+  const GLfloat pos[] = {5.0, -5.0, 10.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_POSITION, pos);
+  const GLfloat dir[] = {g_lightDir.x, g_lightDir.y, g_lightDir.z, g_lightDir.w};
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
+  float at = 0.5;
+  glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, &at);
+  at = 0.02;
+  glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, &at);
+  at = 0.0;
+  glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &at);
 
-  // Create a direction for our light - it must be normalized 
-  light.Direction = g_lightDir;
-
-  // Tell the device about the light and turn it on
-  g_pd3dDevice->SetLight( 0, &light );
-  g_pd3dDevice->LightEnable( 0, TRUE ); 
-  d3dSetRenderState( D3DRS_LIGHTING, TRUE );
-  //d3dSetRenderState( D3DRS_AMBIENT, D3DCOLOR_XRGB(50,50,50) );
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
 
 }
 
@@ -109,8 +100,8 @@ void CreateLight()
 
 struct BG_VERTEX 
 {
-    D3DXVECTOR4 position;
-    DWORD       color;
+    CVector position;
+    CRGBA color;
 };
 
 BG_VERTEX g_BGVertices[4];
@@ -119,26 +110,24 @@ BG_VERTEX g_BGVertices[4];
 
 // fill in background vertex array with values that will
 // completely cover screen
-void SetupGradientBackground( DWORD dwTopColor, DWORD dwBottomColor )
+void SetupGradientBackground(const CRGBA& dwTopColor, const CRGBA& dwBottomColor)
 {
-	float x1 = -0.5f;
-	float y1 = -0.5f;
-	float x2 = (float)g_iWidth - 0.5f;
-    float y2 = (float)g_iHeight - 0.5f;
-	
-	g_BGVertices[0].position = D3DXVECTOR4( x2, y1, 0.0f, 1.0f );
-    g_BGVertices[0].color = dwTopColor;
+  float x1 = -0.5f;
+  float y1 = -0.5f;
+  float x2 = (float)g_iWidth - 0.5f;
+  float y2 = (float)g_iHeight - 0.5f;
 
-    g_BGVertices[1].position = D3DXVECTOR4( x2, y2, 0.0f, 1.0f );
-    g_BGVertices[1].color = dwBottomColor;
+  g_BGVertices[0].position = CVector( x2, y1, 0.0f, 1.0f );
+  g_BGVertices[0].color = dwTopColor;
 
-    g_BGVertices[2].position = D3DXVECTOR4( x1, y1, 0.0f, 1.0f );
-    g_BGVertices[2].color = dwTopColor;
+  g_BGVertices[1].position = CVector( x2, y2, 0.0f, 1.0f );
+  g_BGVertices[1].color = dwBottomColor;
 
-    g_BGVertices[3].position = D3DXVECTOR4( x1, y2, 0.0f, 1.0f );
-    g_BGVertices[3].color = dwBottomColor;
-	
-	return;
+  g_BGVertices[2].position = CVector( x1, y1, 0.0f, 1.0f );
+  g_BGVertices[2].color = dwTopColor;
+
+  g_BGVertices[3].position = CVector( x1, y2, 0.0f, 1.0f );
+  g_BGVertices[3].color = dwBottomColor;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,26 +135,16 @@ void SetupGradientBackground( DWORD dwTopColor, DWORD dwBottomColor )
 
 void RenderGradientBackground()
 {
-  static MorphColor colora(300),colorb(300);
-  SetupGradientBackground(colora.getColor(),0);//colorb.getColor());
-  colora.incrementColor();colorb.incrementColor();
-
-    // clear textures
-    g_pd3dDevice->SetTexture( 0, NULL );
-	g_pd3dDevice->SetTexture( 1, NULL );
-    d3dSetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_DISABLE );
-	d3dSetTextureStageState( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
-
-	// don't write to z-buffer
-	d3dSetRenderState( D3DRS_ZENABLE, FALSE ); 
-    
-	g_pd3dDevice->SetVertexShader( D3DFVF_XYZRHW | D3DFVF_DIFFUSE );
-	g_pd3dDevice->DrawPrimitiveUP( D3DPT_TRIANGLESTRIP, 2, g_BGVertices, sizeof(BG_VERTEX) );
-
-	// restore state
-	d3dSetRenderState( D3DRS_ZENABLE, TRUE ); 
-
-	return;
+  glDisable(GL_TEXTURE_2D);
+  glBegin(GL_TRIANGLE_STRIP);
+  for (size_t i=0;i<4;++i)
+  {
+    glColor3f(g_BGVertices[i].color.r, g_BGVertices[i].color.g,
+              g_BGVertices[i].color.b);
+    glVertex3f(g_BGVertices[i].position.x, g_BGVertices[i].position.y,
+               g_BGVertices[i].position.z);
+  }
+  glEnd();
 }
 
 void SetCamera()
@@ -184,78 +163,14 @@ void SetCamera()
 	D3DXMATRIX m_Projection; 
   D3DXMatrixPerspectiveFovLH(&m_Projection, D3DX_PI/4, (float)(g_iWidth)/(float)(g_iHeight)*g_fRatio, 0.1, 1000.0);
 	d3dSetTransform(D3DTS_PROJECTION, &m_Projection);
-}
 
-void RenderSetup()
-{
-  d3dSetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
-	d3dSetRenderState( D3DRS_LIGHTING, TRUE );
-	d3dSetRenderState( D3DRS_ZENABLE, D3DZB_TRUE );
-	d3dSetRenderState( D3DRS_ALPHABLENDENABLE, FALSE );
-	d3dSetRenderState( D3DRS_NORMALIZENORMALS, TRUE );
-}
-
-// XBMC has loaded us into memory,
-// we should set our core values
-// here and load any settings we
-// may have from our config file
-extern "C" void Create(LPDIRECT3DDEVICE8 pd3dDevice, int iWidth, int iHeight, const char* szScreenSaverName, float ratio)
-{
-	strcpy(g_szScrName,szScreenSaverName);
-	g_pd3dDevice = pd3dDevice;
-	g_iWidth = iWidth;
-	g_iHeight = iHeight;
-  g_fRatio = ratio;
-  if (g_fRatio < 0.1f) // backwards compatible
-    g_fRatio = 1.0f;
-	// Load the settings
-	//Create the vertex buffer from our device
-  RenderSetup();
-  SetCamera();
-  LoadSettings();
-	settings.fractal = new Fractal();
-	settings.fractalcontroller = new FractalController(settings.fractal, &settings);
-  settings.fractalcontroller->SetMorphSpeed(settings.morphSpeed);
-	CreateLight();
-
-}
-
-// XBMC tells us we should get ready
-// to start rendering. This function
-// is called once when the screensaver
-// is activated by XBMC.
-extern "C" void Start()
-{
-	SetupGradientBackground( D3DCOLOR_RGBA(0,0,0,255), D3DCOLOR_RGBA(0,60,60,255) );
-	return;
-}
-
-// XBMC tells us to render a frame of
-// our screensaver. This is called on
-// each frame render in XBMC, you should
-// render a single frame only - the DX
-// device will already have been cleared.
-extern "C" void Render()
-{
-  CreateLight();
-  SetCamera();
-  RenderSetup();
-  RenderGradientBackground();
-	glInit();
-  static int sx = (rand()%2)*2-1, sy = (rand()%2)*2-1;
-	glRotatef(sx*settings.frame*0.0051,sy*settings.frame*0.0032,0);
-	Step();
-	settings.fractal->Render();
-}
-
-// XBMC tells us to stop the screensaver
-// we should free any memory and release
-// any resources we have created.
-extern "C" void Stop()
-{
-	delete settings.fractal;
-	delete settings.fractalcontroller;
-	return;
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  float aspectRatio = (float)m_iWidth/(float)m_iHeight;
+  gluPerspective(45, aspectRatio, 0.1, 1000.0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  gluLookAt(0.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 }
 
 void SetDefaults()
@@ -272,90 +187,155 @@ void SetDefaults()
   settings.animationCountdown = 3+rand()%5;
 }
 
+////////////////////////////////////////////////////////////////////////////
+// XBMC has loaded us into memory, we should set our core values
+// here and load any settings we may have from our config file
+//
+ADDON_STATUS ADDON_Create(void* hdl, void* props)
+{
+  if (!props)
+    return ADDON_STATUS_UNKNOWN;
+
+  SCR_PROPS* scrprops = (SCR_PROPS*)props;
+
+  g_iWidth = scrprops->width;
+  g_iHeight  = scrprops->height;
+  g_fRatio = (float)g_iWidth/(float)g_iHeight;
+
+  SetCamera();
+  SetDefaults();
+  settings.fractal = new Fractal();
+  settings.fractalcontroller = new FractalController(settings.fractal, &settings);
+  settings.fractalcontroller->SetMorphSpeed(settings.morphSpeed);
+  CreateLight();
+
+  return ADDON_STATUS_OK;
+}
+
+// XBMC tells us we should get ready
+// to start rendering. This function
+// is called once when the screensaver
+// is activated by XBMC.
+extern "C" void Start()
+{
+  SetupGradientBackground(CRGBA(0,0,0,255), CRGBA(0,60,60,255));
+}
+
+// XBMC tells us to render a frame of
+// our screensaver. This is called on
+// each frame render in XBMC, you should
+// render a single frame only - the DX
+// device will already have been cleared.
+extern "C" void Render()
+{
+  CreateLight();
+  SetCamera();
+  RenderSetup();
+  RenderGradientBackground();
+  static int sx = (rand()%2)*2-1, sy = (rand()%2)*2-1;
+
+  glRotatef(sx*settings.frame*0.0051,sy*settings.frame*0.0032,0);
+  Step();
+  settings.fractal->Render();
+}
+
+// XBMC tells us to stop the screensaver
+// we should free any memory and release
+// any resources we have created.
+extern "C" void ADDON_Stop()
+{
+  delete settings.fractal;
+  delete settings.fractalcontroller;
+}
+
+extern "C" void ADDON_Destroy()
+{
+}
+
+extern "C" ADDON_STATUS ADDON_GetStatus()
+{
+  return ADDON_STATUS_OK;
+}
+
+extern "C" bool ADDON_HasSettings()
+{
+  return false;
+}
+
+extern "C" unsigned int ADDON_GetSettings(ADDON_StructSetting ***sSet)
+{
+  return 0;
+}
+
+extern "C" ADDON_STATUS ADDON_SetSetting(const char *strSetting, const void *value)
+{
+  return ADDON_STATUS_OK;
+}
+
+extern "C" void ADDON_FreeSettings()
+{
+}
+
+extern "C" void ADDON_Announce(const char *flag, const char *sender, const char *message, const void *data)
+{
+}
+
+extern "C" void GetInfo(SCR_INFO *info)
+{
+}
+
 // Load settings from the [screensavername].xml configuration file
 // the name of the screensaver (filename) is used as the name of
 // the xml file - this is sent to us by XBMC when the Init func
 // is called.
-void LoadSettings()
-{
-	XmlNode node, childNode, grandChild;
-	CXmlDocument doc;
-	
-	// Set up the defaults
-	SetDefaults();
+//void LoadSettings()
+//{
+//        XmlNode node, childNode, grandChild;
+//        CXmlDocument doc;
+//        
+         Set up the defaults
+//        SetDefaults();
 
-	char szXMLFile[1024];
-	strcpy(szXMLFile, "Q:\\screensavers\\");
-	strcat(szXMLFile, g_szScrName);
-	strcat(szXMLFile, ".xml");
+//        char szXMLFile[1024];
+//        strcpy(szXMLFile, "Q:\\screensavers\\");
+//        strcat(szXMLFile, g_szScrName);
+//        strcat(szXMLFile, ".xml");
 
-	OutputDebugString("Loading XML: ");
-	OutputDebugString(szXMLFile);
+//        OutputDebugString("Loading XML: ");
+//        OutputDebugString(szXMLFile);
 
-	// Load the config file
-	if (doc.Load(szXMLFile) >= 0)
-	{
-		node = doc.GetNextNode(XML_ROOT_NODE);
-		while(node > 0)
-		{
-			if (strcmpi(doc.GetNodeTag(node),"screensaver"))
-			{
-				node = doc.GetNextNode(node);
-				continue;
-			}
-			if (childNode = doc.GetChildNode(node,"maxobjects")){
-        settings.iMaxObjects = atoi(doc.GetNodeText(childNode));
-			}
-      if (childNode = doc.GetChildNode(node,"maxcutoffdepth")){
-        settings.iMaxDepth = atoi(doc.GetNodeText(childNode));
-			}
-      if (childNode = doc.GetChildNode(node,"morphspeed")){
-        settings.morphSpeed = atof(doc.GetNodeText(childNode));
-			}
-      if (childNode = doc.GetChildNode(node,"animationtime")){
-        settings.animationTime = 60*atof(doc.GetNodeText(childNode));
-			}
-      if (childNode = doc.GetChildNode(node,"transitiontime")){
-        settings.nextTransition = settings.transitionTime = 60*atof(doc.GetNodeText(childNode));
-			}
-      if (childNode = doc.GetChildNode(node,"presetchance")){
-        settings.presetChance = atof(doc.GetNodeText(childNode));
-			}
+         Load the config file
+//        if (doc.Load(szXMLFile) >= 0)
+//        {
+//                node = doc.GetNextNode(XML_ROOT_NODE);
+//                while(node > 0)
+//                {
+//                        if (strcmpi(doc.GetNodeTag(node),"screensaver"))
+//                        {
+//                                node = doc.GetNextNode(node);
+//                                continue;
+//                        }
+//                        if (childNode = doc.GetChildNode(node,"maxobjects")){
+//        settings.iMaxObjects = atoi(doc.GetNodeText(childNode));
+//                        }
+//      if (childNode = doc.GetChildNode(node,"maxcutoffdepth")){
+//        settings.iMaxDepth = atoi(doc.GetNodeText(childNode));
+//                        }
+//      if (childNode = doc.GetChildNode(node,"morphspeed")){
+//        settings.morphSpeed = atof(doc.GetNodeText(childNode));
+//                        }
+//      if (childNode = doc.GetChildNode(node,"animationtime")){
+//        settings.animationTime = 60*atof(doc.GetNodeText(childNode));
+//                        }
+//      if (childNode = doc.GetChildNode(node,"transitiontime")){
+//        settings.nextTransition = settings.transitionTime = 60*atof(doc.GetNodeText(childNode));
+//                        }
+//      if (childNode = doc.GetChildNode(node,"presetchance")){
+//        settings.presetChance = atof(doc.GetNodeText(childNode));
+//                        }
 
-			node = doc.GetNextNode(node);
-		}
-		doc.Close();
-	}
-}
-
-
-extern "C" void GetInfo(SCR_INFO* pInfo)
-{
-	// not used, but can be used to pass info
-	// back to XBMC if required in the future
-	return;
-}
-
-extern "C" 
-{
-
-	struct ScreenSaver
-	{
-	public:
-		void (__cdecl* Create)(LPDIRECT3DDEVICE8 pd3dDevice, int iWidth, int iHeight, const char* szScreensaver, float ratio);
-		void (__cdecl* Start) ();
-		void (__cdecl* Render) ();
-		void (__cdecl* Stop) ();
-		void (__cdecl* GetInfo)(SCR_INFO *info);
-	} ;
-
-
-	void __declspec(dllexport) get_module(struct ScreenSaver* pScr)
-	{
-		pScr->Create = Create;
-		pScr->Start = Start;
-		pScr->Render = Render;
-		pScr->Stop = Stop;
-		pScr->GetInfo = GetInfo;
-	}
-};
+//                        node = doc.GetNextNode(node);
+//                }
+//                doc.Close();
+//        }
+//}
