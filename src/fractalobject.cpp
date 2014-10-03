@@ -4,6 +4,8 @@
 //////////////////////////////////////////////////////////////////
 #include "fractalobject.h"       // also includes glu and gl correctly
 #include "types.h"
+
+#include <GL/gl.h>
 //#include "materials.h"
 
 
