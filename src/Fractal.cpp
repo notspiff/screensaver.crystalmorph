@@ -151,21 +151,6 @@ void RenderGradientBackground()
 
 void SetCamera()
 {
-  D3DXMATRIX m_World;
-  D3DXMatrixIdentity( &m_World );
-	d3dSetTransform(D3DTS_WORLD, &m_World);
-
-	D3DXMATRIX m_View;// = ViewMatrix(D3DXVECTOR(0,-20,20), D3DXVECTOR(0,0,0), D3DXVECTOR(0,-1,0), 0);
-	D3DXVECTOR3 from = D3DXVECTOR3(0,0,-2);
-	D3DXVECTOR3 to   = D3DXVECTOR3(0,0,0);
-	D3DXVECTOR3 up   = D3DXVECTOR3(0,1,0);
-	D3DXMatrixLookAtLH(&m_View,&from,&to,&up);
-	d3dSetTransform(D3DTS_VIEW, &m_View);
-
-	D3DXMATRIX m_Projection; 
-  D3DXMatrixPerspectiveFovLH(&m_Projection, D3DX_PI/4, (float)(g_iWidth)/(float)(g_iHeight)*g_fRatio, 0.1, 1000.0);
-	d3dSetTransform(D3DTS_PROJECTION, &m_Projection);
-
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   float aspectRatio = (float)m_iWidth/(float)m_iHeight;
