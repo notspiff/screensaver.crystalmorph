@@ -1,7 +1,6 @@
 #ifndef __FRACTAL_H_
 #define __FRACTAL_H_
 
-#include "glutil.h"
 #include "sphere.h"
 #include "Util.h"
 

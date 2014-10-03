@@ -3,16 +3,16 @@
 //
 //////////////////////////////////////////////////////////////////
 #include "fractalobject.h"       // also includes glu and gl correctly
+#include "types.h"
 //#include "materials.h"
 
 
 
-extern LPDIRECT3DDEVICE8 g_pd3dDevice;
 // stuff for the environment cube
 struct FracVertex
 {
-	D3DXVECTOR3 position;
-	D3DXVECTOR3 normal;
+	CVector position;
+	CVector normal;
 //	DWORD color; // The vertex colour.
 };
 
