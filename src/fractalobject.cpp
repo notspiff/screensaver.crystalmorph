@@ -205,9 +205,9 @@ void Fractal::RenderBase(const CRGBA& color)
     glBegin(GL_TRIANGLE_STRIP);
     for (size_t i=0;i<6;++i)
     {
-      glColor3f(g_pyramidVertices[i].color.r/255.0,
-                g_pyramidVertices[i].color.g/255.0,
-                g_pyramidVertices[i].color.b/255.0);
+      glNormal3f(g_pyramidVertices[i].normal.x,
+                 g_pyramidVertices[i].normal.y,
+                 g_pyramidVertices[i].normal.z);
       glVertex3f(g_pyramidVertices[i].position.x,
                  g_pyramidVertices[i].position.y,
                  g_pyramidVertices[i].position.z);
