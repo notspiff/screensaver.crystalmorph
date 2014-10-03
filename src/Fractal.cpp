@@ -20,6 +20,8 @@
 */
 
 
+#include <xbmc/xbmc_scr_dll.h>
+#include <GL/gl.h>
 #include "Fractal.h"
 #include "fractalcontroller.h"
 #include "Fractal.h"
