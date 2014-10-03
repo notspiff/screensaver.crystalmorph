@@ -280,7 +280,7 @@ extern "C" void GetInfo(SCR_INFO *info)
 //        XmlNode node, childNode, grandChild;
 //        CXmlDocument doc;
 //        
-         Set up the defaults
+//         Set up the defaults
 //        SetDefaults();
 
 //        char szXMLFile[1024];
@@ -291,7 +291,7 @@ extern "C" void GetInfo(SCR_INFO *info)
 //        OutputDebugString("Loading XML: ");
 //        OutputDebugString(szXMLFile);
 
-         Load the config file
+//         Load the config file
 //        if (doc.Load(szXMLFile) >= 0)
 //        {
 //                node = doc.GetNextNode(XML_ROOT_NODE);
