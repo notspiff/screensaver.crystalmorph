@@ -9,9 +9,6 @@ struct CUSTOMVERTEX
   CRGBA color; // The vertex colour.
 };
 
-#define M_PI 3.14159265358979323846f
-#define ColorRGB D3DCOLOR
-
 CRGBA LerpColor3(const CRBA& s, const CRGBA& e,float r);
 
 CRGBA HSVtoRGB( float h, float s, float v );
