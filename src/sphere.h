@@ -1,7 +1,6 @@
 // $Id: sphere.h,v 1.4 2003/10/14 21:13:28 toolshed Exp $
 
 #pragma once
-#include <xtl.h>
 /* dxframework - "The Engine Engine" - DirectX Game Framework
  * Copyright (C) 2003  Corey Johnson, Jonathan Voigt, Nuttapong Chentanez
  * Contributions by Adam Tercala, Jeremy Lee, David Yeung, Evan Leung
@@ -53,9 +52,6 @@ public:
 	 * Overide the default Render3D function of C_Primitive, for demonstration purpose
 	 */
 	virtual void Render3D();
-
-  void SetColor(DWORD color);
-
 private:
 	unsigned int numIndices;
 	unsigned int numVertices;		///< Number of slices(rings) along y axis

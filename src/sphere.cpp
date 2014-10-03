@@ -134,14 +134,6 @@ void C_Sphere::Update() {
 	g_pSphereVertexBuffer->Unlock();
 }
 
-void C_Sphere::SetColor(DWORD color)
-{
-  SPHEREVERTEX * vertexMemory;
-  g_pSphereVertexBuffer->Lock(0, numVertices*  sizeof(SPHEREVERTEX), (BYTE**)&vertexMemory, 0);
-  /*for (int i = 0; i < (int)numVertices; i++) 
-			vertexMemory[i].diffuseColor = color; */
-	g_pSphereVertexBuffer->Unlock();
-}
 
 void C_Sphere::Render3D() {
 
