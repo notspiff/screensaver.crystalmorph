@@ -24,6 +24,7 @@
 
 
 #include "sphere.h"
+#include "types.h"
 
 
 struct SPHEREVERTEX
