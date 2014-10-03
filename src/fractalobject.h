@@ -51,9 +51,9 @@ public:
 	void Init(int numTransforms);
 
 	void Render();
-	void RenderChild(int depth, int parentTransform, ColorRGB childColor);
+	void RenderChild(int depth, int parentTransform, const CRGBA& childColor);
 	//void RenderSelection(int depth);
-	void RenderBase(ColorRGB color);
+	void RenderBase(const CRGBA& color);
 	void SetSelection(bool drawSelection, int numSelected);
 	void ToggleCutoffType();
 	void IncrementCutoff(bool up);
