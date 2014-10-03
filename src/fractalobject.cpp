@@ -145,8 +145,8 @@ void Fractal::RenderChild(int depth, int parentTransform, const CRGBA& childColo
 //applys the transform to the matrix
 void Fractal::ApplyTransform(int i)
 {
-  glScalef(myData.transforms[i].scaling.x, myData.transforms[i].scaling.y, myData.transforms[i].scaling.z);
-  glTranslatef(myData.transforms[i].translation.x, myData.transforms[i].translation.y, myData.transforms[i].translation.z);
+  glScale3f(myData.transforms[i].scaling.x, myData.transforms[i].scaling.y, myData.transforms[i].scaling.z);
+  glTranslate3f(myData.transforms[i].translation.x, myData.transforms[i].translation.y, myData.transforms[i].translation.z);
   glRotatef(myData.transforms[i].rotation.x, 1.0, 0.0, 0.0);
   glRotatef(myData.transforms[i].rotation.y, 0.0, 1.0, 0.0);
   glRotatef(myData.transforms[i].rotation.z, 0.0, 0.0, 1.0);
