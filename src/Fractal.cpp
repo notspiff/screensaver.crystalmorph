@@ -153,8 +153,7 @@ void SetCamera()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  float aspectRatio = (float)m_iWidth/(float)m_iHeight;
-  gluPerspective(45, aspectRatio, 0.1, 1000.0);
+  gluPerspective(45, g_fAspect, 0.1, 1000.0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   gluLookAt(0.0, 0.0, -2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
