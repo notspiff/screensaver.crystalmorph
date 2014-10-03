@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.h"
+
 struct CUSTOMVERTEX
 {
   float x, y, z; // The untransformed position for the vertex.
