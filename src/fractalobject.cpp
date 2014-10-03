@@ -108,7 +108,6 @@ void Fractal::Init(int numTransforms)
   redBlueRender = false;
   mySphere = new C_Sphere();
 
-  glInit();
   initBuffer(&g_pCubeVertexBuffer, g_cubeVertices, 24);
   initBuffer(&g_pPyramidVertexBuffer, g_pyramidVertices, 6);
 }
