@@ -87,6 +87,6 @@ void MorphColor::incrementColor()
     ratio += 1.0f/(float)steps;
     if (ratio > 1.0f) 
       ratio = 1.0f;
-    currentColor = CRGBA::LerpColor(startColor, endColor, ratio);
+    currentColor = CRGBA::Lerp(startColor, endColor, ratio);
   }
 }
