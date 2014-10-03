@@ -107,9 +107,6 @@ void Fractal::Init(int numTransforms)
   myColorLerpAmount = 0.7;
   redBlueRender = false;
   mySphere = new C_Sphere();
-
-  initBuffer(&g_pCubeVertexBuffer, g_cubeVertices, 24);
-  initBuffer(&g_pPyramidVertexBuffer, g_pyramidVertices, 6);
 }
 
 //Renders the fractal
