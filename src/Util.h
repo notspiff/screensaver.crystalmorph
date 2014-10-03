@@ -9,7 +9,7 @@ struct CUSTOMVERTEX
   CRGBA color; // The vertex colour.
 };
 
-CRGBA LerpColor3(const CRBA& s, const CRGBA& e,float r);
+CRGBA LerpColor3(const CRGBA& s, const CRGBA& e,float r);
 
 CRGBA HSVtoRGB( float h, float s, float v );
 inline float frand(){return ((float) rand() / (float) RAND_MAX);};
