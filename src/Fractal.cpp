@@ -217,7 +217,6 @@ extern "C" void Render()
 {
   CreateLight();
   SetCamera();
-  RenderSetup();
   RenderGradientBackground();
   static int sx = (rand()%2)*2-1, sy = (rand()%2)*2-1;
 
