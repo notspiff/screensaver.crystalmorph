@@ -8,7 +8,7 @@ enable_language(CXX)
 
 find_package(Kodi REQUIRED)
 
-include_directories(${XBMC_INCLUDE_DIR})
+include_directories(${KODI_INCLUDE_DIR})
 
 set(CRYSTALMORPH_SOURCES src/fractalcontroller.cpp
                          src/Fractal.cpp
