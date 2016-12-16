@@ -267,10 +267,6 @@ extern "C" void ADDON_Announce(const char *flag, const char *sender, const char 
 {
 }
 
-extern "C" void GetInfo(SCR_INFO *info)
-{
-}
-
 // Load settings from the [screensavername].xml configuration file
 // the name of the screensaver (filename) is used as the name of
 // the xml file - this is sent to us by XBMC when the Init func
