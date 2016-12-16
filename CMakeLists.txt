@@ -7,8 +7,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
 enable_language(CXX)
 
 find_package(Kodi REQUIRED)
+find_package(OpenGL REQUIRED)
 
-include_directories(${XBMC_INCLUDE_DIR})
+include_directories(${KODI_INCLUDE_DIR})
 
 set(CRYSTALMORPH_SOURCES src/fractalcontroller.cpp
                          src/Fractal.cpp
@@ -16,7 +17,7 @@ set(CRYSTALMORPH_SOURCES src/fractalcontroller.cpp
                          src/sphere.cpp
                          src/Util.cpp)
 
-set(DEPLIBS)
+set(DEPLIBS ${OPENGL_LIBRARIES})
 
 build_addon(screensaver.crystalmorph CRYSTALMORPH DEPLIBS)
 
