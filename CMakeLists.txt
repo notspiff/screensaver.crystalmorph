@@ -17,6 +17,13 @@ set(CRYSTALMORPH_SOURCES src/fractalcontroller.cpp
                          src/sphere.cpp
                          src/Util.cpp)
 
+set(CRYSTALMORPH_HEADERS src/Fractal.h
+                         src/types.h
+                         src/fractalcontroller.h
+                         src/Util.h
+                         src/sphere.h
+                         src/fractalobject.h)
+
 set(DEPLIBS ${OPENGL_LIBRARIES})
 
 build_addon(screensaver.crystalmorph CRYSTALMORPH DEPLIBS)
